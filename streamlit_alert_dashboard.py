@@ -19,16 +19,14 @@ if uploaded_file is not None:
 
     # Filters
     st.title("🔔 Alert Dashboard - Last 7 Days")
-    assignees = st.multiselect("Filter by Assignee", df["assignee"].dropna().unique(), default=df["assignee"].dropna().unique())
     services = st.multiselect("Filter by Service", df["service"].dropna().unique(), default=df["service"].dropna().unique())
 
-    filtered = df[df["assignee"].isin(assignees) & df["service"].isin(services)]
+    filtered = df[df["service"].isin(services)]
 
     # Charts
-    st.subheader("🕒 Average TTR by Assignee")
-    avg_ttr = filtered.groupby("assignee")["TTR (mins)"].mean().reset_index()
-    fig1 = px.bar(avg_ttr, x="assignee", y="TTR (mins)", color="assignee", text_auto=".2s")
-    st.plotly_chart(fig1, use_container_width=True)
+    st.subheader("🕒 Average TTR")
+    avg_ttr = filtered["TTR (mins)"].mean()
+    st.metric("Average TTR (mins)", f"{avg_ttr:.2f}")
 
     st.subheader("📊 Alerts per Service")
     fig2 = px.histogram(filtered, x="service", color="service", title="Alert Volume per Service")
@@ -37,10 +35,6 @@ if uploaded_file is not None:
     st.subheader("📅 Alerts Over Time")
     fig3 = px.histogram(filtered, x="created_at", nbins=30, title="Alert Trend by Created Time")
     st.plotly_chart(fig3, use_container_width=True)
-
-    st.subheader("👥 Alert Count per Assignee")
-    fig4 = px.histogram(filtered, x="assignee", color="assignee", title="Alert Distribution")
-    st.plotly_chart(fig4, use_container_width=True)
 
     st.subheader("🕒 Busiest Hours of the Day (by Alert Creation)")
     fig5 = px.histogram(filtered, x="created_hour", nbins=24, title="Alerts by Hour of Day", labels={"created_hour": "Hour of Day"})
