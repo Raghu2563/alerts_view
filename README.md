@@ -1,8 +1,6 @@
-Absolutely! Here's a full `README.md` you can copy-paste directly into your GitHub repo:
 
----
 
-````markdown
+
 # 🔔 Streamlit Alert Dashboard
 
 This is a lightweight, interactive dashboard for visualizing alert data (like from Squadcast or similar systems) using a CSV export.
@@ -31,8 +29,11 @@ Built with **Streamlit**, **Plotly**, and **Pandas**, this tool helps you and yo
 ### 1. Clone this repo
 ```bash
 git clone https://github.com/yourusername/alert-dashboard.git
+```
+```bash
 cd alert-dashboard
-````
+```
+
 
 ### 2. Create a virtual environment (optional but recommended)
 
