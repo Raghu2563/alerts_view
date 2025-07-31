@@ -40,6 +40,17 @@ if uploaded_file is not None:
     fig5 = px.histogram(filtered, x="created_hour", nbins=24, title="Alerts by Hour of Day", labels={"created_hour": "Hour of Day"})
     st.plotly_chart(fig5, use_container_width=True)
 
+    st.subheader("🔁 Most Frequently Triggered Alerts")
+    if "title" in df.columns and "id" in df.columns and "service" in df.columns:
+        top_alerts = filtered.groupby(["title", "service"]).agg({"id": ["count", "first"]}).reset_index()
+        top_alerts.columns = ["Alert Title", "Service", "Count", "Sample ID"]
+        top_alerts = top_alerts.sort_values(by="Count", ascending=False).head(10)
+        top_alerts["Sample Alert URL"] = top_alerts["Sample ID"].apply(lambda x: f"[Link](https://app.squadcast.com/incident/{x})")
+        st.markdown("### Top 10 Alerts with Sample Links")
+        st.write(top_alerts[["Alert Title", "Service", "Count", "Sample Alert URL"]].to_markdown(index=False), unsafe_allow_html=True)
+    else:
+        st.warning("'title', 'service' or 'id' column not found in the CSV.")
+
     # Raw Data Table
     with st.expander("📄 Show Filtered Raw Data"):
         st.dataframe(filtered)
