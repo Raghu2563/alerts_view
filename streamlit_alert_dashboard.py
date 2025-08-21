@@ -11,22 +11,22 @@ if uploaded_file is not None:
     for col in ["created_at", "acknowledged_at", "resolved_at"]:
         df[col] = pd.to_datetime(df[col], format="%d/%m/%y %H:%M", errors='coerce')
 
-    # Convert TTR to minutes
-    df["TTR (mins)"] = df["ttr (ms)"] / 60000
+    # # Convert TTR to minutes
+    # df["TTR (mins)"] = df["ttr (ms)"] / 60000
 
     # Extract hour of day from created_at
     df["created_hour"] = df["created_at"].dt.hour
 
     # Filters
-    st.title("🔔 Alert Dashboard - Last 7 Days")
+    st.title("🔔 Alert Dashboard ")
     services = st.multiselect("Filter by Service", df["service"].dropna().unique(), default=df["service"].dropna().unique())
 
     filtered = df[df["service"].isin(services)]
 
-    # Charts
-    st.subheader("🕒 Average TTR")
-    avg_ttr = filtered["TTR (mins)"].mean()
-    st.metric("Average TTR (mins)", f"{avg_ttr:.2f}")
+    # # Charts
+    # st.subheader("🕒 Average TTR")
+    # avg_ttr = filtered["TTR (mins)"].mean()
+    # st.metric("Average TTR (mins)", f"{avg_ttr:.2f}")
 
     st.subheader("📊 Alerts per Service")
     fig2 = px.histogram(filtered, x="service", color="service", title="Alert Volume per Service")
